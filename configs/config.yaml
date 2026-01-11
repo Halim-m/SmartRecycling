@@ -1,0 +1,123 @@
+# Smart Recycling - Ana Konfigürasyon Dosyası
+# BM5113 Bilgisayarla Görme Dersi Projesi
+
+project:
+  name: "SmartRecycling"
+  version: "1.0.0"
+  description: "AI-powered Waste Classification System"
+
+data:
+  image_size: [224, 224]
+  num_classes: 9
+  classes:
+    - cardboard
+    - food_organics
+    - glass
+    - metal
+    - miscellaneous_trash
+    - paper
+    - plastic
+    - textile_trash
+    - vegetation
+
+  class_names_tr:
+    cardboard: "Karton"
+    food_organics: "Organik Atık"
+    glass: "Cam"
+    metal: "Metal"
+    miscellaneous_trash: "Diğer Çöp"
+    paper: "Kağıt"
+    plastic: "Plastik"
+    textile_trash: "Tekstil"
+    vegetation: "Bitki Atığı"
+
+  split_ratios:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+
+model:
+  backbone: "efficientnetv2-s"
+  pretrained: true
+  input_shape: [224, 224, 3]
+  dropout_rate: 0.4
+  dense_units: 256
+
+training:
+  batch_size: 32
+  epochs_phase1: 15  # Feature extraction
+  epochs_phase2: 20  # Fine-tuning
+  learning_rate: 0.001
+  fine_tune_learning_rate: 0.00001
+  optimizer: "adam"
+  early_stopping_patience: 5
+  reduce_lr_patience: 3
+  reduce_lr_factor: 0.5
+
+augmentation:
+  rotation_range: 40
+  width_shift_range: 0.2
+  height_shift_range: 0.2
+  horizontal_flip: true
+  vertical_flip: false
+  zoom_range: 0.2
+  brightness_range: [0.8, 1.2]
+  fill_mode: "nearest"
+
+paths:
+  data_raw: "data/raw"
+  data_processed: "data/processed"
+  models: "saved_models"
+  logs: "logs"
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  model_path: "saved_models/waste_classifier_final.keras"
+
+recycling_info:
+  cardboard:
+    bin_color: "mavi"
+    recyclable: true
+    instructions: "Düzleştirip mavi kutuya atın"
+    environmental_impact: "1 ton karton geri dönüşümü 17 ağaç kurtarır"
+  food_organics:
+    bin_color: "kahverengi"
+    recyclable: true
+    instructions: "Kompost kutusuna atın"
+    environmental_impact: "Organik atık kompost olarak kullanılabilir"
+  glass:
+    bin_color: "yeşil"
+    recyclable: true
+    instructions: "Temizleyip yeşil kutuya atın"
+    environmental_impact: "Cam %100 geri dönüştürülebilir"
+  metal:
+    bin_color: "sarı"
+    recyclable: true
+    instructions: "Yıkayıp sarı kutuya atın"
+    environmental_impact: "Alüminyum geri dönüşümü %95 enerji tasarrufu sağlar"
+  miscellaneous_trash:
+    bin_color: "siyah"
+    recyclable: false
+    instructions: "Genel çöp kutusuna atın"
+    environmental_impact: "Geri dönüşümü olmayan atıkları azaltmaya çalışın"
+  paper:
+    bin_color: "mavi"
+    recyclable: true
+    instructions: "Kuru tutup mavi kutuya atın"
+    environmental_impact: "Kağıt geri dönüşümü su tüketimini %60 azaltır"
+  plastic:
+    bin_color: "sarı"
+    recyclable: true
+    instructions: "Durulayıp sarı kutuya atın"
+    environmental_impact: "Plastik doğada 450 yıl kalır"
+  textile_trash:
+    bin_color: "mor"
+    recyclable: true
+    instructions: "Tekstil kumbarasına atın"
+    environmental_impact: "Giysiler yeniden kullanılabilir veya geri dönüştürülebilir"
+  vegetation:
+    bin_color: "yeşil"
+    recyclable: true
+    instructions: "Bahçe atıkları kutusuna atın"
+    environmental_impact: "Bitki atıkları kompost yapımında kullanılabilir"
