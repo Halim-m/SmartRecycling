@@ -59,10 +59,6 @@ SmartRecycling/
 │   └── schemas/
 │       └── prediction.py       # Pydantic models
 ├── src/                        # ML modules
-│   ├── data/
-│   │   ├── preprocessing.py    # Image preprocessing
-│   │   ├── augmentation.py     # Data augmentation
-│   │   └── dataloader.py       # Dataset loading
 │   ├── training/
 │   │   ├── trainer.py          # 2-phase training
 │   │   ├── callbacks.py        # Keras callbacks
@@ -90,8 +86,11 @@ SmartRecycling/
 │   └── nginx.conf
 ├── notebooks/
 │   └── model_training.ipynb    # Google Colab training notebook
-├── saved_models/               # Trained models
-├── scripts/                    # Utility scripts
+├── saved_models/               # Trained models (not committed)
+├── scripts/                    # Dataset download and figure generation
+├── docs/
+│   ├── figures/                # Figures used in this README and the report
+│   └── rapor_taslak.md         # Report draft (Turkish)
 ├── docker-compose.yml
 └── requirements.txt
 ```
@@ -100,11 +99,26 @@ SmartRecycling/
 
 ## Installation & Usage
 
+### Model weights
+
+Trained weights are not committed (`*.keras` is git-ignored). Train the model with `notebooks/model_training.ipynb`
+(written for Google Colab) and place the result at:
+
+```
+saved_models/waste_classifier_final.keras
+```
+
+This path is set in `configs/config.yaml` (`api.model_path`). If the file is missing, the API still starts, but without a loaded model.
+
+The dataset helpers in `scripts/` (`download_data.py`, `download_datasets.py`) download and merge the source datasets; `data/` is git-ignored.
+
 ### With Docker (Recommended)
 
 ```bash
 docker-compose up --build
 ```
+
+The `saved_models/` folder is mounted read-only into the API container.
 
 - Frontend: http://localhost:3000
 - API: http://localhost:8000
@@ -240,6 +254,8 @@ Output
 | Garbage Classification | ~15,150 |
 | TrashNet | ~2,527 |
 
+`configs/config.yaml` also defines a ninth class, `vegetation`; the results above are for the 8-class model.
+
 **Split:** 70% Train / 15% Validation / 15% Test
 
 **Augmentation:** Rotation (+-40), ShiftScaleRotate, HorizontalFlip, RandomBrightnessContrast, GaussNoise, GaussianBlur
@@ -273,6 +289,10 @@ User (Browser)
 
 ---
 
-## License
+## Report
 
-This project was developed as part of the BM5113 Computer Vision course.
+The project report (Turkish) is included as `final_rapor.pdf`, together with `Akilli-Atik-Siniflandirma-Sistemi.pdf` and the draft in `docs/rapor_taslak.md`.
+
+## Notes
+
+This project was developed as part of the BM5113 Computer Vision course. The repository has no license file.
